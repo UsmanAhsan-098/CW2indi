@@ -213,7 +213,7 @@
                 function (response) {
                     response.json().then(
                         function (json) {
-                        webstoreall.products = json;
+                            webstore.lessons = json;
                         console.log(webstore.lessons)
                     });
             })
@@ -221,7 +221,7 @@
                 function (response) {
                     response.json().then(
                         function (json) {
-                        webstoreall.order_details = json;
+                            webstore.Orderinfo = json;
                         console.log(webstore.Orderinfo)
                     });
             })
