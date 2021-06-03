@@ -95,7 +95,7 @@
                 sitename: "After School Club",
                 products: arr,
 
-                
+                lessons:[],
                 cart:[],
                 showproduct:true,
 
@@ -103,7 +103,11 @@
                     name:" ",
                     phone: null
 
-                }
+                },
+
+                Orderinfo:[]
+
+
 
             },
             methods: {
@@ -204,6 +208,24 @@
                 },
             },
 
+            Created: function(){
+                fetch('https://cw2indi.herokuapp.com/collection/lessons').then(
+                function (response) {
+                    response.json().then(
+                        function (json) {
+                        webstoreall.products = json;
+                        console.log(webstore.lessons)
+                    });
+            })
+            fetch('https://cw2indi.herokuapp.com/collection/order').then(
+                function (response) {
+                    response.json().then(
+                        function (json) {
+                        webstoreall.order_details = json;
+                        console.log(webstore.Orderinfo)
+                    });
+            })
+        }
             
         });
 
