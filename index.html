@@ -199,6 +199,17 @@
         },
 
         submitForm() {
+            fetch ('https://cw2indi.herokuapp.com/collection/order',{
+               method: 'POST',
+               headers:{
+                  'Content-Type': 'application/json',
+               },
+               body: JSON.stringify({Name: this.order.name, Phone: this.order.phone, ProductsInOrder: this.cart.map(({title}) => title) })
+               })
+               .then(function (data) {
+                  console.log(data);
+                  
+               });
             alert('Order submitted not cool!')
         },
                 
