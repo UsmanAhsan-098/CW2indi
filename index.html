@@ -52,6 +52,7 @@
                         <img v-bind:src="product.image" width="200" height="200">
                     </figure>
                     <h2 v-html="product.title"></h2>
+                    <p>ID : {{ product._id}}</p>
                     <P>Location: {{product.location}}</P>
                     <p>Price: {{product.price}}</p>
                     <P>Product I.d: {{product.id}}</P>
@@ -70,10 +71,18 @@
 
                 <form @submit="submitForm">
                     <ul>
-                        <li> <label for="Name">Name:</label> </li>
-                        <li> <input type="text" id="Name" name="Name" required></li>
+                     <!--    <li> <label for="Name">Name:</label> </li>
+                       
+                        <li> <input type="text" id="Name"  v-model.trim="order.name" name="Name" required></li>
                         <li> <label for="phone">Phone:</label> </li>
-                        <li> <input type="tel" id="phone" placeholder="e.g 00974 12345678" name="phone" required> </li>
+                        <li> <input type="tel" id="phone" v-model.number="order.phone" placeholder="e.g 00974 12345678" name="phone" required> </li> -->
+                        <p>
+                            <strong>First Name:</strong>
+                            <input id="firstName" required v-model.trim="order.name" type="text" />
+                         </p>
+                         <p><strong>Phone : </strong><input id="phone" required v-model.number='order.phone' type="number"></p>
+                    
+                    
                     </ul>
                     <input type="submit">
                 </form>
@@ -96,10 +105,11 @@
             el: "#app",
             data: {
                 sitename: "After School Club",
-                products: arr,
+                products: [],
 
                 lessons: [],
                 cart: [],
+                cartID: [],
                 showproduct: true,
 
                 order: {
@@ -135,6 +145,39 @@
 
         addtocart: function(product) {
             this.cart.push(product);
+            console.log(product);
+            this.cartID.push (product.id)
+            console.log(product.availableInventory)
+            console.log(this.cartCount(product.id));
+           
+
+           
+
+
+           const newSpace = product.availableInventory;
+
+         
+           
+            console.log("iM HERE");
+
+            console.log(product._id);
+            console.log(newSpace);
+
+            console.log("iM HERE");
+
+            fetch ('https://cw2indi.herokuapp.com/collection/lessons/'+ product._id,{
+                  method: 'PUT',
+                  headers:{
+                     'Content-Type': 'application/json',
+                  },
+                   body: JSON.stringify({availableInventory: newSpace })
+                  }).then(function (data) {
+                     console.log(data);
+                     console.log("Im Here");
+
+             }); 
+                     
+                     
         },
         showcheckout(){
             this.showproduct = this.showproduct ? false : true;
@@ -188,6 +231,9 @@
 
         },
         sortbyloca(location){
+
+           
+
             function compare(a, b) {
                 if (a.location > b.location)
                     return 1;
@@ -196,7 +242,14 @@
                 return 0;
             }
             return this.products.sort(compare)
+
+
+            
+
+
         },
+
+      
 
         submitForm() {
             fetch ('https://cw2indi.herokuapp.com/collection/order',{
@@ -212,6 +265,16 @@
                });
             alert('Order submitted not 123 cool!')
         },
+
+        cartCount(id){
+                  let count = 0;
+                  for (let i = 0; i < this.cartID.length; i++){
+                      if(this.cartID[i] === id){
+                          count++
+                      }
+                  }
+                  return count;
+              },
                 
             },
 
@@ -224,26 +287,25 @@
                     return false
                 }
             },
+           
+          
         },
 
-        Created: function() {
-            fetch('https://cw2indi.herokuapp.com/collection/lessons').then(
-                function (response) {
-                    response.json().then(
-                        function (json) {
-                            webstore.lessons = json;
-                            console.log(webstore.lessons)
-                        });
-                })
-            fetch('https://cw2indi.herokuapp.com/collection/order').then(
-                function (response) {
-                    response.json().then(
-                        function (json) {
-                            webstore.Orderinfo = json;
-                            console.log(webstore.Orderinfo)
-                        });
-                })
-        }
+        created: function() {
+             
+             fetch('https://cw2indi.herokuapp.com/collection/lessons').then(
+              function (response) {
+                  response.json().then(
+                      function (json) {
+                        webstore.products = json;
+                      console.log(webstore.products)
+                  });
+          });
+         
+
+          
+    }
+
             
         });
 
