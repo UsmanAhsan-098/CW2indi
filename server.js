@@ -8,6 +8,8 @@ const app = express()
 
 // config Express.js
 app.use(express.json())
+app.use(express.static('front'));
+
 app.set('port', 3000)
 app.use ((req,res,next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
